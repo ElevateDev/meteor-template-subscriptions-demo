@@ -5,10 +5,22 @@
 <body>
   <h1>Welcome to Meteor!</h1>
 
-  {{> hello}}
+  {{> demoTemplateSubscriptions}}
 </body>
 
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="templateWithSubscriptions">
+  Template With Subscriptions
+</template>
+
+<template name="demoTemplateSubscriptions">
+  <button id="resetCache">Reset Cache</button>
+  <button id="toggleTemplateWithSubscriptions">Toggle Subscription Template</button>
+  <div>
+    {{#each items}}
+      {{text}}<br>
+    {{/each}}
+  </div>
+  {{#if renderSubsTemplate}}
+    {{>templateWithSubscriptions}}
+  {{/if}}
 </template>

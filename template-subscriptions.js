@@ -1,23 +1,33 @@
 someCollection = new Mongo.Collection("someCollection");
 
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault("counter", 0);
+  Session.set("renderSubscriptionTemplate", true);
+  TemplateSubscriptions.cacheManager = new SubsManager({
+      // maximum number of cache subscriptions
+      cacheLimit: 10,
+      // any subscription will be expire after 5 minute, if it's not subscribed again
+      expireIn: 5
+  }); 
 
-  Template.hello.helpers({
-    counter: function () {
-      return Session.get("counter");
-    }
-  });
-
-  Template.hello.subscriptions = function(){
+  Template.templateWithSubscriptions.subscriptions = function(){
     return [["TestSub"]];
   };
 
-  Template.hello.events({
-    'click button': function () {
-      // increment the counter when button is clicked
-      Session.set("counter", Session.get("counter") + 1);
+  Template.demoTemplateSubscriptions.helpers({
+    renderSubsTemplate: function(){
+      return Session.get("renderSubscriptionTemplate");
+    },
+    items: function(){
+      return someCollection.find();
+    }
+  });
+
+  Template.demoTemplateSubscriptions.events({
+    'click #resetCache': function(){
+      TemplateSubscriptions.cacheManager.reset();
+    },
+    'click #toggleTemplateWithSubscriptions': function(){
+      Session.set("renderSubscriptionTemplate",!Session.get("renderSubscriptionTemplate"));
     }
   });
 }
@@ -27,4 +37,8 @@ if (Meteor.isServer) {
     Meteor._sleepForMs(2000);
     return someCollection.find();
   });
+
+  if( someCollection.find().count() === 0 ){
+    someCollection.insert({text: "some item"});
+  }
 }
