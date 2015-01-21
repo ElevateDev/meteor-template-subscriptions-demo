@@ -1,19 +1,38 @@
 <head>
-  <title>template-subscriptions</title>
+  <title>template subscriptions demo</title>
 </head>
 
 <body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> demoTemplateSubscriptions}}
+  {{> demoButtons}}
+  {{> demoSwitch}}
 </body>
 
+<template name="demoButtons">
+  <div class="btn-group">
+    <button id="search" class="btn btn-default">Search</button>
+    <button id="posts" class="btn btn-default">Post List</button>
+  </div>
+</template>
+
+<template name="demoSwitch">
+  {{#if renderSearch}}
+    {{> search}}
+  {{/if}}
+  {{#if renderPosts}}
+    {{> posts}}
+  {{/if}}
+  {{#if renderRandom}}
+    {{> demoTemplateSubscriptions}}
+  {{/if}}
+</template>
+
 <template name="templateWithSubscriptions">
+  {{#unless subscriptionsReady}}{{> spinner}}{{/unless}}  
+  <button id="recomputeSubs">Recompute Subs</button>
   Template With Subscriptions
 </template>
 
 <template name="demoTemplateSubscriptions">
-  <button id="resetCache">Reset Cache</button>
   <button id="toggleTemplateWithSubscriptions">Toggle Subscription Template</button>
   <div>
     {{#each items}}
@@ -23,4 +42,20 @@
   {{#if renderSubsTemplate}}
     {{>templateWithSubscriptions}}
   {{/if}}
+</template>
+
+<template name="posts">
+  {{#unless subscriptionsReady}}{{> spinner}}{{/unless}}  
+  {{#each items}}
+    {{title}}<br>
+  {{/each}} 
+  <button id="more">More Posts"</button>
+</template>
+
+<template name="search">
+  {{#unless subscriptionsReady}}{{> spinner}}{{/unless}}  
+  <input class="form-control" id="search"/>
+  {{#each items}}
+    {{text}}<br>
+  {{/each}}
 </template>

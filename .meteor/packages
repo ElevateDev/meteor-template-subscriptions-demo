@@ -8,3 +8,5 @@ meteor-platform
 insecure
 elevatedevdesign:template-subscriptions
 meteorhacks:subs-manager
+sacha:spin
+nemo64:bootstrap
